@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards | DeutschMate</title>
+    <link rel="stylesheet" href="/styles.css/styles.css">
+    <link rel="stylesheet" href="/styles.css/flashcards.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Deutsch<span>Mate</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="flashcards.html" class="active">Flashcards</a></li>
+                    <li><a href="categories.html">Categories</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="flashcards-section">
+        <div class="container">
+            <h2>German Flashcards</h2>
+            
+            <div class="flashcard-controls">
+                <div class="category-filter">
+                    <label for="category">Category:</label>
+                    <select id="category">
+                        <option value="all">All Categories</option>
+                        <option value="travel">Travel</option>
+                        <option value="food">Food & Dining</option>
+                        <option value="daily">Daily Routines</option>
+                        <option value="health">Health</option>
+                    </select>
+                </div>
+                <div class="flashcard-actions">
+                    <button id="prevCard" class="btn secondary">Previous</button>
+                    <button id="nextCard" class="btn primary">Next</button>
+                </div>
+            </div>
+            
+            <div class="flashcard-container">
+                <div class="flashcard">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="card-content">
+                                <span class="card-tag">Travel</span>
+                                <h3 class="german-word">der Bahnhof</h3>
+                                <p class="note">Click to see translation</p>
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="card-content">
+                                <span class="card-tag">Travel</span>
+                                <h3 class="english-word">train station</h3>
+                                <p class="example">Ich gehe zum Bahnhof. (I am going to the train station.)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flashcard-progress">
+                <div class="progress-text">Card <span id="currentCardNum">1</span> of <span id="totalCards">20</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 5%;"></div>
+                </div>
+            </div>
+            
+            <div class="flashcard-feedback">
+                <button id="markKnown" class="feedback-btn known">I Know This</button>
+                <button id="markReview" class="feedback-btn review">Review Again</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <h2>Deutsch<span>Mate</span></h2>
+                </div>
+                <p>A project to help German learners practice vocabulary</p>
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="flashcards.html">Flashcards</a></li>
+                    <li><a href="categories.html">Categories</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <div class="container">
+                <p>&copy; 2025 DeutschMate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/flashcards.js"></script>
+</body>
+</html>
