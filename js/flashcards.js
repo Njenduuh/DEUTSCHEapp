@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     };
 
-    // DOM elements
+    // Check if DOM elements exist before trying to use them
     const flashcardElement = document.querySelector('.flashcard');
     const categorySelect = document.getElementById('category');
     const prevButton = document.getElementById('prevCard');
@@ -203,6 +203,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const knownButton = document.getElementById('markKnown');
     const reviewButton = document.getElementById('markReview');
 
+    // If any of the important elements don't exist, exit early
+    if (!flashcardElement || !categorySelect || !prevButton || !nextButton || 
+        !currentCardNumElement || !totalCardsElement || !progressFill || 
+        !knownButton || !reviewButton) {
+        console.error("One or more required DOM elements are missing.");
+        return;
+    }
+
     // State variables
     let currentCategory = 'travel';
     let currentCardIndex = 0;
@@ -212,6 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize
     function init() {
+        console.log("Initializing flashcards");
+        
         // Check if there's a selected category in localStorage
         const storedCategory = localStorage.getItem('selectedCategory');
         if (storedCategory && flashcardsData[storedCategory]) {
@@ -244,23 +254,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load cards for a specific category
     function loadCategory(category) {
+        console.log(`Loading category: ${category}`);
+        
         if (flashcardsData[category]) {
             currentCards = [...flashcardsData[category]];
             currentCardIndex = 0;
             updateCardDisplay();
             updateProgress();
+        } else {
+            console.warn(`Category "${category}" not found in flashcardsData`);
         }
     }
 
     // Change category
     function changeCategory() {
         const newCategory = categorySelect.value;
+        console.log(`Changing to category: ${newCategory}`);
+        
         if (newCategory === 'all') {
             // Combine all categories
             currentCards = [];
             for (const category in flashcardsData) {
                 currentCards = [...currentCards, ...flashcardsData[category]];
             }
+            currentCardIndex = 0;
+            updateCardDisplay();
+            updateProgress();
         } else {
             loadCategory(newCategory);
         }
@@ -272,9 +291,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateCardDisplay() {
         if (currentCards.length === 0) {
             // No cards in this category
+            console.warn("No cards available to display");
             return;
         }
 
+        console.log(`Updating display to card ${currentCardIndex + 1} of ${currentCards.length}`);
+        
         const card = currentCards[currentCardIndex];
         const germanWord = flashcardElement.querySelector('.german-word');
         const englishWord = flashcardElement.querySelector('.english-word');
@@ -296,11 +318,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Flip the flashcard
     function flipCard() {
+        console.log("Flipping card");
         flashcardElement.classList.toggle('flipped');
     }
 
     // Show the previous card
     function showPrevCard() {
+        console.log("Showing previous card");
         if (currentCardIndex > 0) {
             currentCardIndex--;
             updateCardDisplay();
@@ -310,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show the next card
     function showNextCard() {
+        console.log("Showing next card");
         if (currentCardIndex < currentCards.length - 1) {
             currentCardIndex++;
             updateCardDisplay();
@@ -319,6 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mark current card as known
     function markAsKnown() {
+        console.log("Marking card as known");
         const currentCard = currentCards[currentCardIndex];
         
         // Add to known cards if not already there
@@ -329,12 +355,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove from review cards if it was there
         reviewCards = reviewCards.filter(card => card.german !== currentCard.german);
         
-        // Go to next card
-        showNextCard();
+        // Go to next card or stay on last card
+        if (currentCardIndex < currentCards.length - 1) {
+            showNextCard();
+        } else {
+            console.log("Already at the last card");
+        }
     }
 
     // Mark current card for review
     function markForReview() {
+        console.log("Marking card for review");
         const currentCard = currentCards[currentCardIndex];
         
         // Add to review cards if not already there
@@ -345,8 +376,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove from known cards if it was there
         knownCards = knownCards.filter(card => card.german !== currentCard.german);
         
-        // Go to next card
-        showNextCard();
+        // Go to next card or stay on last card
+        if (currentCardIndex < currentCards.length - 1) {
+            showNextCard();
+        } else {
+            console.log("Already at the last card");
+        }
     }
 
     // Update progress indicators
@@ -358,11 +393,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const progressPercentage = ((currentCardIndex + 1) / currentCards.length) * 100;
         progressFill.style.width = `${progressPercentage}%`;
         
-        // Disable prev button if at first card
+        // Update button states
         prevButton.disabled = currentCardIndex === 0;
-        
-        // Disable next button if at last card
         nextButton.disabled = currentCardIndex === currentCards.length - 1;
+        
+        // Visually reflect disabled state
+        if (prevButton.disabled) {
+            prevButton.classList.add('disabled');
+        } else {
+            prevButton.classList.remove('disabled');
+        }
+        
+        if (nextButton.disabled) {
+            nextButton.classList.add('disabled');
+        } else {
+            nextButton.classList.remove('disabled');
+        }
     }
 
     // Initialize the app
