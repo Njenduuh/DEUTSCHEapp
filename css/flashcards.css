@@ -193,6 +193,12 @@
     color: white;
 }
 
+/* Button disabled state */
+.btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .flashcard-controls {

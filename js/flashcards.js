@@ -1,5 +1,7 @@
 // Flashcards functionality
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("Flashcards script loaded");
+    
     // Flashcard data - in a real app, this would come from a database
     const flashcardsData = {
         travel: [
@@ -261,6 +263,15 @@ document.addEventListener('DOMContentLoaded', function() {
             currentCardIndex = 0;
             updateCardDisplay();
             updateProgress();
+        } else if (category === 'all') {
+            // Combine all categories
+            currentCards = [];
+            for (const cat in flashcardsData) {
+                currentCards = [...currentCards, ...flashcardsData[cat]];
+            }
+            currentCardIndex = 0;
+            updateCardDisplay();
+            updateProgress();
         } else {
             console.warn(`Category "${category}" not found in flashcardsData`);
         }
@@ -271,18 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const newCategory = categorySelect.value;
         console.log(`Changing to category: ${newCategory}`);
         
-        if (newCategory === 'all') {
-            // Combine all categories
-            currentCards = [];
-            for (const category in flashcardsData) {
-                currentCards = [...currentCards, ...flashcardsData[category]];
-            }
-            currentCardIndex = 0;
-            updateCardDisplay();
-            updateProgress();
-        } else {
-            loadCategory(newCategory);
-        }
+        loadCategory(newCategory);
         currentCategory = newCategory;
         localStorage.setItem('selectedCategory', newCategory);
     }
@@ -307,9 +307,13 @@ document.addEventListener('DOMContentLoaded', function() {
         englishWord.textContent = card.english;
         example.textContent = card.example;
         
-        // Update category tag
+        // Update category tag - capitalize first letter
+        const displayCategory = currentCategory === 'all' 
+            ? 'All Categories' 
+            : currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1);
+            
         cardTag.forEach(tag => {
-            tag.textContent = currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1);
+            tag.textContent = displayCategory;
         });
 
         // Reset card flip
